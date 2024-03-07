@@ -4,13 +4,17 @@ function allUser() {
     $('#table').empty()
     $.getJSON('/admin/list', function (data) {
         $.each(data, function (key, user) {
+            let role = []
+            for (let i = 0; i < user.roles.length; i++) {
+                role.push(user.roles[i].name)
+            }
             $('#allUsersTable').append($('<tr>').append(
                     $('<td>').text(user.id),
                     $('<td>').text(user.userName),
                     $('<td>').text(user.lastName),
                     $('<td>').text(user.age),
                     $('<td>').text(user.email),
-                    $('<td>').text(user.roles.join(', ')),
+                    $('<td>').text(role.join(', ')),
                     $('<td>').append(
                         '<button type=\'button\' data-toggle=\'modal\' class=\'btn-info btn\'' +
                         ' data-target=\'#updateUser\' data-user-id=\'' + user.id + '\'>Update</button>'),
@@ -44,11 +48,11 @@ $('#updateUser').on('show.bs.modal', function (e) {
         $.getJSON('admin/roles', function (roles) {
             let roleUser = modal.find('#updateRoles').empty()
             roles.forEach(function (role) {
-                roleUser.append(new Option(role, role))
+                roleUser.append(new Option(role.name, role.name))
             })
             if (user.roles) {
                 user.roles.forEach(function (userWithRole) {
-                    roleUser.find(`option[value="${userWithRole}"]`).prop('selected', true)
+                    roleUser.find(`option[value="${userWithRole.name}"]`).prop('selected', true)
                 })
             }
             roleUser.trigger("change")
@@ -99,7 +103,7 @@ $('#deleteUser').on('show.bs.modal', (e) => {
         $('#delEmail').empty().val(user.email)
         let roles = ''
         for (let i = 0; i < user.roles.length; i++) {
-            roles += '<option value="' + user.roles[i] + '">' + user.roles[i] + '</option>'
+            roles += '<option value="' + user.roles[i].name + '">' + user.roles[i].name + '</option>'
         }
         $('#delRoles').empty().html(roles)
 
@@ -157,7 +161,7 @@ $('[href="#new"]').on('show.bs.tab', () => {
             $('#newRoles').empty().val()
             $.each(roles, function (key, role) {
                 $('#newRoles').append(
-                    $('<option>').text(role).attr('value', role),
+                    $('<option>').text(role.name).attr('value', role.name),
                 )
             })
         })

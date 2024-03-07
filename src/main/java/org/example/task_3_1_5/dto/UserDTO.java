@@ -11,12 +11,12 @@ public class UserDTO {
     private String userName;
     private String lastName;
     private String password;
-    private Set<Role> roles;
+    private Set<String> roles;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String userName, String lastName, int age, String email, String password, Set<Role> roles) {
+    public UserDTO(Long id, String userName, String lastName, int age, String email, String password, Set<String> roles) {
         this.id = id;
         this.email = email;
         this.age = age;
@@ -67,11 +67,11 @@ public class UserDTO {
     }
 
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 

@@ -1,6 +1,7 @@
 package org.example.task_3_1_5.controller;
 
 
+import org.example.task_3_1_5.service.RoleService;
 import org.example.task_3_1_5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,13 @@ public class AuthController {
 
     private final UserService userService;
     private final RegistrationServiceImpl registrationService;
+    private final RoleService roleService;
 
     @Autowired
-    public AuthController(UserService userService, RegistrationServiceImpl registrationService) {
+    public AuthController(UserService userService, RegistrationServiceImpl registrationService, RoleService roleService) {
         this.userService = userService;
         this.registrationService = registrationService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/login")
@@ -46,7 +49,7 @@ public class AuthController {
             return "registration";
         }
 
-        user.setRoles(Collections.singleton(Role.USER));
+        user.setRoles(Collections.singleton(roleService.findByName("USER")));
         registrationService.register(user);
 
         return "redirect:/auth/login";

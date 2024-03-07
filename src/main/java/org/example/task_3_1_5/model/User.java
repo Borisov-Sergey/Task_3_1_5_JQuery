@@ -1,6 +1,8 @@
 package org.example.task_3_1_5.model;
 
 import org.example.task_3_1_5.dto.UserDTO;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -30,9 +32,11 @@ public class User {
     private String password;
 
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_rule", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     public User() {
@@ -44,7 +48,6 @@ public class User {
         this.age = userDTO.getAge();
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
-        this.roles = userDTO.getRoles();
     }
 
     public String getPassword() {
